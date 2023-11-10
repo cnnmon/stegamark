@@ -20,7 +20,7 @@ export default function Home() {
     fetch('/api/getAllImages')
       .then((response) => response.json())
       .then((data) => setImages(data.images));
-  });
+  }, []);
  
   return (
     <div className="gap-8 grid">
@@ -42,7 +42,7 @@ export default function Home() {
 
       <div>
         <h2>Saved images</h2>
-        <p>Try appending any 4-digit number (padded with 0s) to the end of the url, or try the below:</p>
+        <p>Try appending any 8-digit number (padded with 0s) to the end of the url, or try the below:</p>
         <div className="flex flex-col">
           {images.map((image) => 
             <Link href={`/${image.id}`} key={image.id}>{image.id}</Link>

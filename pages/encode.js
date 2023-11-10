@@ -4,7 +4,7 @@ export default function Encode() {
   return (
     <div className="gap-4 grid">
       <Back />
-      <h2>Encode</h2>
+      <h2>Encode my image</h2>
       <div className="bg-gray-200 flex items-center p-4 rounded-lg gap-2">
         <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Browse files...</button>
         <p>Upload an image to view</p>

@@ -5,21 +5,20 @@ import Link from 'next/link';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
-/* Generates all possible 4 character strings */
-function generateAllPossibleIds() {
-  const possibleIds = [];
-  for (let i = 0; i <= 9999; i++) {
-    const paddedNumber = i.toString().padStart(4, '0');
-    possibleIds.push(paddedNumber);
-  }
-  return possibleIds;
-}
-
 /* Returns all possible paths for https://website.com/:imageId */
 export async function getStaticPaths() {
-  const possibleIds = generateAllPossibleIds();
+  const response = await fetch(`${API_URL}/api/getAllImages`);
+
+  if (!response.ok) {
+    return {
+      paths: [],
+      fallback: false
+    };
+  }
+
+  const { images } = await response.json();
   return {
-    paths: possibleIds.map((id) => ({ params: { imageId: id } })),
+    paths: images.map((image) => ({ params: { imageId: image.id.toString() } })),
     fallback: false
   };
 }
@@ -28,9 +27,19 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params: { imageId } }) {
   const response = await fetch(`${API_URL}/api/getImageById?id=${imageId}`);
 
+  if (!response.ok) {
+    throw new Error(JSON.stringify(response));
+  }
+
+  const { image } = await response.json();
+
+  if (!image) {
+    throw new Error(JSON.stringify(response));
+  }
+
   return {
     props: {
-      image: !response.ok ? null : images.find(({ id }) => id === imageId)
+      image,
     }
   };
 }
