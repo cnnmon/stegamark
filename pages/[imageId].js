@@ -5,17 +5,21 @@ import Link from 'next/link';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
+/* Generates all possible 4 character strings */
+function generateAllPossibleIds() {
+  const possibleIds = [];
+  for (let i = 0; i <= 9999; i++) {
+    const paddedNumber = i.toString().padStart(4, '0');
+    possibleIds.push(paddedNumber);
+  }
+  return possibleIds;
+}
+
 /* Returns all possible paths for https://website.com/:imageId */
 export async function getStaticPaths() {
-  const response = await fetch(`${API_URL}/api/getAllImages`);
-
-  if (!response.ok) {
-    throw new Error(response.statusText);
-  }
-
-  const { images } = await response.json();
+  const possibleIds = generateAllPossibleIds();
   return {
-    paths: images.map((image) => ({ params: { imageId: image.id } })),
+    paths: possibleIds.map((id) => ({ params: { imageId: id } })),
     fallback: false
   };
 }
