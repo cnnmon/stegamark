@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Back from '../components/Back';
 import { images } from '../lib/constants';
+import Link from 'next/link';
 
 // TODO: Change this to wherever it's hosted
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
@@ -68,7 +69,7 @@ export default function ImageLookup({ image }) {
         <div>
           <h2>General</h2>
           <p><b>ID</b> {id}</p>
-          <p><b>Source</b> <a href={src} className="overflow-ellipsis overflow-hidden">{src}</a></p>
+          <p><b>Source</b> <Link href={src} className="overflow-ellipsis overflow-hidden">{src}</Link></p>
         </div>
         <div>
           <h2>Metadata</h2>

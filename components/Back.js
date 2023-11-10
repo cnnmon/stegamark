@@ -1,5 +1,7 @@
+import Link from 'next/link'
+
 export default function BackButton() {
   return (
-    <a href="/">Go back</a>
+    <Link href="/">Go back</Link>
   )
 }

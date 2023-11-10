@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Link from 'next/link';
 
 function NavigationButton({ page, text }) {
   const onClick = () => {
@@ -44,7 +45,7 @@ export default function Home() {
         <h2>Saved images</h2>
         <div className="flex flex-col">
           {images.map((image) => 
-            <a href={`/${image.id}`} key={image.id}>{image.id}</a>
+            <Link href={`/${image.id}`} key={image.id}>{image.id}</Link>
           )}
         </div>
       </div>
