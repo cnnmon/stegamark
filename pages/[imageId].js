@@ -3,7 +3,6 @@ import Back from '../components/Back';
 import { images } from '../lib/constants';
 import Link from 'next/link';
 
-// TODO: Change this to wherever it's hosted
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 /* Returns all possible paths for https://website.com/:imageId */

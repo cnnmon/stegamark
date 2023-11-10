@@ -10,7 +10,6 @@ function NavigationButton({ page, text }) {
     <button onClick={onClick} className="bg-gray-200 flex items-center rounded-lg w-[50%] h-[200px] justify-center p-5">
       {text}
     </button>
-
   )
 }
 
