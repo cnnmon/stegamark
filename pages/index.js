@@ -42,6 +42,7 @@ export default function Home() {
 
       <div>
         <h2>Saved images</h2>
+        <p>Try appending any 4-digit number (padded with 0s) to the end of the url, or try the below:</p>
         <div className="flex flex-col">
           {images.map((image) => 
             <Link href={`/${image.id}`} key={image.id}>{image.id}</Link>

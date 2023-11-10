@@ -28,19 +28,24 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params: { imageId } }) {
   const response = await fetch(`${API_URL}/api/getImageById?id=${imageId}`);
 
-  if (!response.ok) {
-    throw new Error(response.statusText);
-  }
-
   return {
     props: {
-      image: images.find(({ id }) => id === imageId)
+      image: !response.ok ? null : images.find(({ id }) => id === imageId)
     }
   };
 }
 
 /* Render page */
 export default function ImageLookup({ image }) {
+  if (!image) {
+    return (
+      <>
+        <Back />
+        <p>Image not found</p>
+      </>
+    );
+  }
+
   const { id, src, metadata } = image;
 
   /* If metadata is given as a string, parse it into JSON 
