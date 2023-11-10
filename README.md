@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Overview
+Next.js project for CS 194 about steganography. This repository contains the front-end framework & APIs.
 
 ## Getting Started
 
-First, run the development server:
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Pages
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Most relevant front-end code lives in `/pages`. Any file in this folder will become a new page with automatic routing handled by Next.js. Notable files:
+- `index.js` is the landing page
+- `[imageId].js` provides [dynamic routing](https://nextjs.org/docs/pages/building-your-application/routing/dynamic-routes), e.g. we support `https://.../<imageId>` if it exists in our DB
 
-## Learn More
+## Client-side API
+`/api` contains our public API and will be used to interface with our DB. Some template files I've set up, currently they return hard-coded data from `lib/constants`:
+- `/api/getAllImages` lists all images in our DB (we only really need to know all of the possible IDs for dynamic routing)
+- `/api/getImageById` takes in an "id" in its query and uses it to query the DB to see if the image exists; if so, returns it
 
-To learn more about Next.js, take a look at the following resources:
+The template APIs are both being used in the front-end. [More information about Next.js public APIs here.](https://nextjs.org/docs/pages/building-your-application/routing/api-routes)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Misc Important Files
+- `/lib/constants.js` contains constant variables
+- `/styles/globals.css` contains our global css; since we're using tailwind, make sure to nest any css under `@layer base`
+- `/components/*` can hold any custom React components you want to use across files

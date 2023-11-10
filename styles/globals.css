@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@200;400;500;700&display=swap');
+
+@layer base {
+  body {
+    height: 100vh;
+    font-family: 'Raleway', sans-serif;
+  }  
+
+  h1 {
+    @apply text-5xl;
+    font-weight: 700;
+  }
+
+  h2 {
+    @apply text-2xl;
+    font-weight: 700;
+  }
+
+  p {
+    @apply text-base;
+    font-weight: 300;
+  }
+
+  a {
+    @apply text-blue-500;
+    @apply hover:text-blue-700;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .disabled {
+    @apply text-gray-500;
+    cursor: not-allowed;
+  }
+}
