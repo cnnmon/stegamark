@@ -1,6 +1,5 @@
 ## Overview
 Next.js project for CS 194 about steganography. This repository contains the front-end framework & APIs.
-**NOTE:** For the sake of generating all possible paths quickly, I made the allowable ID range to be any 4-digit number padded with 0s (e.g. 0001, 0323, 9999).
 
 ## Getting Started
 
