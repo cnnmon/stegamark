@@ -1,8 +1,15 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+
+module.exports = {
   images: {
     domains: ['pbs.twimg.com', 'twitter.com'],
   },
-}
-
-module.exports = nextConfig
+  async rewrites() { //reroute upload requests to go to heroku server. 
+    return [
+      {
+        source: '/api/upload',
+        destination: 'https://rosteals-server-fbea1f0f4f47.herokuapp.com/upload', 
+      },
+    ];
+  },
+};

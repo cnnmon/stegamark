@@ -11,11 +11,8 @@ function NavigationButton({ page, text }) {
     };
 
     return (
-        <button
-            onClick={onClick}
-            className="bg-gray-200 flex items-center rounded-lg w-[40%] h-[200px] justify-center p-5 bg-stone-900"
-        >
-            {text}
+        <button onClick={onClick} className="bg-gray-200 flex items-center rounded-lg w-[50%] h-[200px] justify-center p-5">
+      {text}
         </button>
     );
 }
@@ -52,10 +49,31 @@ export default function Home() {
                 </div>
             </div>
 
+             <div className="flex gap-4 justify-center">
+                <NavigationButton
+                  page="encode"
+                  text="I want to encode - embed an image with new metadata"
+                />
+                <NavigationButton
+                  page="decode"
+                  text="I want to decode - check for or edit an image's embedded metadata"
+                />
+              </div>
+
+        <div>
+            <h2>Saved images</h2>
+            <p>Try appending any 8-digit number (padded with 0s) to the end of the url, or try the below:</p>
+            <div className="flex flex-col">
+              {images.map((image) => 
+                <Link href={`/${image.id}`} key={image.id}>{image.id}</Link>
+              )}
+            </div>
+        </div>        
+
+
             <div className="flex flex-col gap-4 place-items-center">
-                <ImageDetails />
-                <Encode />
-                <Decode />
+                {/*<Encode />
+                <Decode />*/}
             </div>
 
             <About />
