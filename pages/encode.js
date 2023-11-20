@@ -7,6 +7,42 @@ import About from "../components/about";
 import ImageDetails from "../components/imageDetails";
 import axios from 'axios'
 
+function listUsers() {
+    fetch('/api/notion_listUsers')
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+}
+
+function createDB() {
+  fetch('/api/notion_createDB')
+      .then((response) => response.json())
+      .then((data) => console.log(data)); 
+}
+
+function createEntry() {
+  fetch('/api/notion_createEntry')
+      .then((response) => response.json())
+      .then((data) => console.log(data)); 
+}
+
+function readEntry() {
+  fetch('/api/notion_readEntry')
+      .then((response) => response.json())
+      .then((data) => console.log(data)); 
+}
+
+function updateEntry() {
+  fetch('/api/notion_updateEntry')
+      .then((response) => response.json())
+      .then((data) => console.log(data)); 
+}
+
+function archiveEntry() {
+  fetch('/api/notion_archiveEntry')
+      .then((response) => response.json())
+      .then((data) => console.log(data)); 
+}
+
 export default function Encode() {
   const [loaded, setLoaded] = useState();
   const [file, setFile] = useState(null);
@@ -80,6 +116,7 @@ export default function Encode() {
           <button type="submit">Upload</button>
         </form>
           
+
       </div>
 
 
