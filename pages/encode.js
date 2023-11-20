@@ -5,32 +5,40 @@ import Back from '../components/Back';
 import Decode from "../components/decode";
 import About from "../components/about";
 import ImageDetails from "../components/imageDetails";
+import axios from 'axios'
 
 export default function Encode() {
   const [loaded, setLoaded] = useState();
-  const [file, setFile] = useState();
+  const [file, setFile] = useState(null);
+  const [uploadUrl, setUploadUrl] = useState(null);
     function handleChange(e) {
         console.log(e.target.files);
-        setFile(URL.createObjectURL(e.target.files[0]));
-        handleSubmit();
+        const selectedFile = e.target.files[0];
+        setFile(selectedFile);
+        if (selectedFile) {
+          console.log('File selected:', selectedFile);
+        }
       };
-    const handleSubmit = async() =>{
+    const handleSubmit = async(e) =>{
+          e.preventDefault();
+          if (!file) {
+          console.error('No file selected');
+          return;
+        }
+        console.log(file)
+
         //make a POST request to send this image to the S3 bucket...
         const formData = new FormData(); //create formdata to send...
         formData.append('file',file);
 
         try{
-          const response = await fetch("https://rosteals-server-fbea1f0f4f47.herokuapp.com/upload", {
-            method: "post",
-            headers: { "Content-Type": "multipart/form-data" },
-            body: formData
-          });
-          if (response.ok) {
-              // Handle success
-              console.log('File uploaded successfully');
-              console.log('file:' + response);
-            } else {
-              // Handle error
+          let response = await axios.post('http://localhost:8001/upload', formData);
+            if (response.status === 200) {
+              const data = await response.data;
+                console.log('Server message:', data);
+                setUploadUrl(response.data.imageUrl);
+              } 
+            else {
               console.error('Failed to upload file');
             }
           } catch (error) {
@@ -66,10 +74,12 @@ export default function Encode() {
       <h2>Encode my image</h2>
 
       <div className="bg-gray-200 flex items-center p-4 rounded-lg gap-2">
-        <input className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"  id="file_input" type="file" onChange={handleChange} />
-
-        {//<p>Upload an image to view</p>
-        }
+        <form onSubmit={handleSubmit}>
+          <input className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"  
+            id="file_input" name="file" type="file" onChange={handleChange} />
+          <button type="submit">Upload</button>
+        </form>
+          
       </div>
 
 
@@ -79,7 +89,7 @@ export default function Encode() {
           onLoad={() => setLoaded(true)}
           className="flex flex-col gap-4 place-items-center">
                 <ImageDetails />
-                <img className="object-contain h-48 w-96 " src={file} />
+              
         </div>
 
             <About />

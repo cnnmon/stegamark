@@ -8,7 +8,8 @@ module.exports = {
     return [
       {
         source: '/api/upload',
-        destination: 'https://rosteals-server-fbea1f0f4f47.herokuapp.com/upload', 
+        destination: 'https://localhost:8001/upload', 
+        //destination: 'https://rosteals-server-fbea1f0f4f47.herokuapp.com/upload', 
       },
     ];
   },
