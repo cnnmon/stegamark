@@ -32,7 +32,7 @@ export default function Encode() {
         formData.append('file',file);
 
         try{
-          let response = await axios.post('http://localhost:8001/upload', formData);
+          let response = await axios.post('https://rosteals-server-fbea1f0f4f47.herokuapp.com/upload', formData);
             if (response.status === 200) {
               const data = await response.data;
                 console.log('Server message:', data);
