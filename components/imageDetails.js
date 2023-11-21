@@ -1,21 +1,35 @@
 import { useState } from "react";
 import Button from "./button";
+import axios from 'axios';
 
-export default function ImageDetails() {
+export default function ImageDetails({uploadedImageUrl, selectedId, key}) {
+
     const [essentialsOpen, setEssentialsOpen] = useState(true);
+    const [imageUrl, setImageUrl] = useState(uploadedImageUrl);
+    const [id, setId] = useState(selectedId);
+
 
     const changePage = () => {
         setEssentialsOpen((current) => !current);
     };
 
-    async function onSubmit(event) {
+    async function onSubmit(e) {
+        //we're using the onSubmit function in the encode.js file...
+
         return;
     }
+    const updateId = (newId) => {
+        setId(newId);
+      };
 
-    function createFormField(id, name) {
+    const updateImageUrl = (newImageUrl) => {
+        setImageUrl(newImageUrl);
+      };
+
+    function createFormField(title, name) {
         return (
             <div className="flex flex-row space-x-4 place-items-center">
-                <p>{id}: </p>
+                <p>{title}: </p>
                 <input type="text" name={name} className="h-8 w-[60%]" />
             </div>
         );
@@ -24,7 +38,7 @@ export default function ImageDetails() {
     const essentialsPage = (
         <div className="gap-4 grid w-[85%]">
             <h2>Edit image metadata</h2>
-            <div className="flex flex-col items-center p-4 rounded-lg space-x-6 bg-stone-900">
+            <div key={key} className="flex flex-col items-center p-4 rounded-lg space-x-6 bg-stone-900">
                 <div className="flex flex-col items-center p-4 rounded-lg space-x-6 bg-stone-800">
                     hello there world this is where info is gonna go
                 </div>
@@ -34,7 +48,7 @@ export default function ImageDetails() {
                     watermarked versions of your image in the next step.
                 </p>
 
-                <Button page="" text="Submit" />
+                <Button type= "submit" page="" text="Submit" />
             </div>
         </div>
     );
@@ -52,7 +66,7 @@ export default function ImageDetails() {
                     watermarked versions of your image in the next step.
                 </p>
 
-                <Button page="" text="Submit" />
+                <Button type= "submit" page="" text="Submit" />
             </div>
         </div>
     );
@@ -60,24 +74,26 @@ export default function ImageDetails() {
     // return essentialsOpen ? essentialsPage : technicalStuff;
 
     return (
-        <div className="gap-4 grid w-[85%]">
+        <div key={key}className="gap-4 grid w-[85%]">
             <h2>The Essentials</h2>
             <div className="flex flex-col gap-4 p-4 rounded-lg space-x-6 bg-stone-900">
+            (DEBUG: Encoding successful! This image has been embeddd with this id: {id}. The permalink for this image and its metadata will be at ourwebsitestegamarkwhatever.com/0000{id}. 
+                the image url is https://stega-storage.s3.amazonaws.com//encoded_images/encoded_{id}.png)
                 <div className="flex flex-row justify-between">
+                    
                     <div className="flex flex-col w-[50%] items-left p-4 rounded-lg bg-stone-800">
-                        <form
+                        {/*<form
                             onSubmit={onSubmit}
-                            className="flex flex-col gap-4"
-                        >
-                            {createFormField("Title", "title")}
+                            className="flex flex-col gap-4">
+                            {createFormField("Title", "title")}*/}
                             {createFormField("Uploaded By", "updatedBy")}
                             {createFormField("Source", "source")}
                             {createFormField("Date Uploaded", "dateUploaded")}
                             {createFormField("Comments", "comments")}
-                        </form>
+                        {/*</form>}*/}
                     </div>
                     <div className="grid w-[45%] justify-items-center p-4 rounded-lg bg-stone-800">
-                        <img src="/stegalogo.png" className="h-[300px]" />
+                        <img src={imageUrl} className="h-[300px] object-contain" />
                     </div>
                 </div>
                 <div className="flex flex-row justify-between">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState, useRef} from "react";
 import Link from "next/link";
 import Back from '../components/Back';
 //import Encode from "../components/encode";
@@ -43,36 +43,77 @@ function archiveEntry() {
       .then((data) => console.log(data)); 
 }
 
+function getNextId(){
+  //TODO: this should (ig by looking at the database?) grab the next unique id. 
+  // ex, if there are 0050 images in the database, the next id should be 51 (or something like that.)
+  let nextId = "0050"
+  console.log(nextId);
+  return nextId
+}
+
 export default function Encode() {
-  const [loaded, setLoaded] = useState();
+  const [loaded, setLoaded] = useState(); //allows user to hit submit after a file is selected 
   const [file, setFile] = useState(null);
+
+  const [loading, setLoading] = useState(false); //becomes true while the file is uploading and being encoded, then becomes false again. 
+
+
+  const [uploaded, setUploaded] = useState(); //becomes true after the file is uploaded, and the url is in uploadUrl
   const [uploadUrl, setUploadUrl] = useState(null);
-    function handleChange(e) {
+
+  const [id, setId] = useState(0); // Initial ID value
+  const [key, setKey] = useState(0); // this key thing forces the react component to update 
+
+
+  function handleChange(e) {
         console.log(e.target.files);
         const selectedFile = e.target.files[0];
         setFile(selectedFile);
         if (selectedFile) {
           console.log('File selected:', selectedFile);
         }
+        setLoaded(true)
       };
+    const handleMetadataSubmit = async(e) =>{
+        e.preventDefault();
+        console.log(e);
+          // Create FormData and append form fields
+        const formData = new FormData();
+        /*Object.entries(formFields).forEach(([key, value]) => {
+          formData.append(key, value);
+        });*/
+
+        console.log(formData);
+
+
+      }
+
     const handleSubmit = async(e) =>{
           e.preventDefault();
           if (!file) {
           console.error('No file selected');
           return;
         }
-        console.log(file)
+        setLoading(true);
+        //Get an ID....
+        const id = await getNextId(); //get this image's id and set that state before doing anything else...
+        setId(id);
 
-        //make a POST request to send this image to the S3 bucket...
+        //make a POST request to send this image and ID to the Flask server...
         const formData = new FormData(); //create formdata to send...
         formData.append('file',file);
+        formData.append('id', id)
 
         try{
-          let response = await axios.post('https://rosteals-server-fbea1f0f4f47.herokuapp.com/upload', formData);
+          let response = await axios.post('https://rosteals-server-fbea1f0f4f47.herokuapp.com/encode', formData);
             if (response.status === 200) {
               const data = await response.data;
-                console.log('Server message:', data);
-                setUploadUrl(response.data.imageUrl);
+              console.log('image uploaded to:', data.imageUrl);
+              console.log("set id to: " + id);
+              setUploadUrl(response.data.imageUrl);
+              setUploaded(true);
+              setKey((prevKey)=> prevKey+1);
+              setLoading(false);
               } 
             else {
               console.error('Failed to upload file');
@@ -113,21 +154,34 @@ export default function Encode() {
         <form onSubmit={handleSubmit}>
           <input className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"  
             id="file_input" name="file" type="file" onChange={handleChange} />
-          <button type="submit">Upload</button>
+          <button className = "items-right"style={loaded ? {} : { display: 'none' }} // button appears after upload 
+            type="submit">Click here to upload image</button>
+        
+    
         </form>
-          
-
-      </div>
 
 
+        </div>
 
         <div 
-          style={loaded ? {} : { display: 'none' }}
-          onLoad={() => setLoaded(true)}
+            style={loading ? {} : { display: 'none' }} // this will appear as the image is loading.
+            className="flex flex-col gap-4 place-items-center">
+             the image has been received! encoded version now loading...
+        </div>
+        <div 
+          style={uploaded ? {} : { display: 'none' }}
           className="flex flex-col gap-4 place-items-center">
-                <ImageDetails />
+                <form onSubmit={handleMetadataSubmit}>
+                <ImageDetails key={key} selectedId={id} uploadedImageUrl={uploadUrl}/>
+                </form>
+                
               
         </div>
+          
+
+
+
+
 
             <About />
         </div>
