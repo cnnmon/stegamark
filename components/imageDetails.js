@@ -1,12 +1,12 @@
 import { useState } from "react";
 import Button from "./button";
-import axios from 'axios';
 
-export default function ImageDetails({uploadedImageUrl, selectedId, key}) {
+export default function ImageDetails({uploadedImageUrl, selectedId, key, formFields, onFormFieldChange}) {
 
     const [essentialsOpen, setEssentialsOpen] = useState(true);
     const [imageUrl, setImageUrl] = useState(uploadedImageUrl);
     const [id, setId] = useState(selectedId);
+
 
 
     const changePage = () => {
@@ -14,8 +14,7 @@ export default function ImageDetails({uploadedImageUrl, selectedId, key}) {
     };
 
     async function onSubmit(e) {
-        //we're using the onSubmit function in the encode.js file...
-
+        //i set us up to use the onmetadatasubmit function in encode.js instead! 
         return;
     }
     const updateId = (newId) => {
@@ -28,9 +27,13 @@ export default function ImageDetails({uploadedImageUrl, selectedId, key}) {
 
     function createFormField(title, name) {
         return (
-            <div className="flex flex-row space-x-4 place-items-center">
+            <div key={name} className="flex flex-row space-x-4 place-items-center">
                 <p>{title}: </p>
-                <input type="text" name={name} className="h-8 w-[60%]" />
+                <input type="text" 
+                name={name} 
+                value={formFields[name]} 
+                onChange={(e) => onFormFieldChange(name, e.target.value)} 
+                className="h-8 w-[60%]" />
             </div>
         );
     }
@@ -84,8 +87,8 @@ export default function ImageDetails({uploadedImageUrl, selectedId, key}) {
                     <div className="flex flex-col w-[50%] items-left p-4 rounded-lg bg-stone-800">
                         {/*<form
                             onSubmit={onSubmit}
-                            className="flex flex-col gap-4">
-                            {createFormField("Title", "title")}*/}
+                            className="flex flex-col gap-4">*/}
+                            {createFormField("Title", "title")}
                             {createFormField("Uploaded By", "updatedBy")}
                             {createFormField("Source", "source")}
                             {createFormField("Date Uploaded", "dateUploaded")}

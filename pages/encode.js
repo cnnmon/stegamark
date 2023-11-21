@@ -44,7 +44,7 @@ function archiveEntry() {
 }
 
 function getNextId(){
-  //TODO: this should (ig by looking at the database?) grab the next unique id. 
+  //!! TODO: this should (ig by looking at the database?) grab the next unique id. 
   // ex, if there are 0050 images in the database, the next id should be 51 (or something like that.)
   let nextId = "0050"
   console.log(nextId);
@@ -52,19 +52,19 @@ function getNextId(){
 }
 
 export default function Encode() {
-  const [loaded, setLoaded] = useState(); //allows user to hit submit after a file is selected 
+  const [loaded, setLoaded] = useState(); //submit button only appears after a file is selected 
   const [file, setFile] = useState(null);
 
   const [loading, setLoading] = useState(false); //becomes true while the file is uploading and being encoded, then becomes false again. 
 
 
-  const [uploaded, setUploaded] = useState(); //becomes true after the file is uploaded, and the url is in uploadUrl
-  const [uploadUrl, setUploadUrl] = useState(null);
+  const [uploaded, setUploaded] = useState(); //becomes true after the encoded image is available, and the url is in uploadUrl
+  const [uploadUrl, setUploadUrl] = useState(null); //has the encoded image url
 
   const [id, setId] = useState(0); // Initial ID value
   const [key, setKey] = useState(0); // this key thing forces the react component to update 
 
-
+  /* this stuff handles the file upload... */
   function handleChange(e) {
         console.log(e.target.files);
         const selectedFile = e.target.files[0];
@@ -74,19 +74,6 @@ export default function Encode() {
         }
         setLoaded(true)
       };
-    const handleMetadataSubmit = async(e) =>{
-        e.preventDefault();
-        console.log(e);
-          // Create FormData and append form fields
-        const formData = new FormData();
-        /*Object.entries(formFields).forEach(([key, value]) => {
-          formData.append(key, value);
-        });*/
-
-        console.log(formData);
-
-
-      }
 
     const handleSubmit = async(e) =>{
           e.preventDefault();
@@ -124,6 +111,39 @@ export default function Encode() {
 
 
       }
+
+    /* this stuff handles the metadata form that appears after image upload */
+    const [formFields, setFormFields] = useState({
+      title: '  ',
+      uploadedBy: '  ',
+      source: '  ',
+      dateUploaded: '  ',
+      comments: '  ',
+    });  
+    const handleMetadataSubmit = async(e) =>{
+        e.preventDefault();
+        // Create FormData and append form fields
+        const formData = new FormData();
+        for(let [key,value] of Object.entries(formFields)){
+          formData.append(key,value);
+        }
+
+        formData.append('imageUrl', uploadUrl);
+        formData.append('id', id);
+
+        /*!! TODO: at this point we have the metadata form all filled out, plus the encoded image's url and its id. 
+        * we've put that data in formData.
+         * next we need to log this in the database
+         * It also would be nice to send the user to the directory URL for this image at this point,
+         * where they can see their encoded image and metadata. */
+
+
+      }
+
+
+    const handleFormFieldChange = (name, value) => {
+      setFormFields({ ...formFields, [name]: value });
+    };
 
   return (
       <div className="gap-4 grid">
@@ -172,7 +192,12 @@ export default function Encode() {
           style={uploaded ? {} : { display: 'none' }}
           className="flex flex-col gap-4 place-items-center">
                 <form onSubmit={handleMetadataSubmit}>
-                <ImageDetails key={key} selectedId={id} uploadedImageUrl={uploadUrl}/>
+                <ImageDetails 
+                key={key} 
+                selectedId={id} 
+                uploadedImageUrl={uploadUrl}
+                formFields={formFields}
+                onFormFieldChange={handleFormFieldChange}/>
                 </form>
                 
               
