@@ -177,7 +177,7 @@ export default function Decode() {
                 
           TODO: we should be:
 
-          - checking if it's a valid imageID (eg a number that exists in our database) and:
+          - checking if it&apos;s a valid imageID (eg a number that exists in our database) and:
           
             -- if so: show the user the associated data we have on that imageID
           

@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import { useState } from "react";
 import Button from "./button";
 
@@ -96,7 +98,7 @@ export default function ImageDetails({uploadedImageUrl, selectedId, key, formFie
                         {/*</form>}*/}
                     </div>
                     <div className="grid w-[45%] justify-items-center p-4 rounded-lg bg-stone-800">
-                        <img src={imageUrl} className="h-[300px] object-contain" />
+                        <Image src={imageUrl} className="h-[300px] object-contain" alt="your encoded image"/>
                     </div>
                 </div>
                 <div className="flex flex-row justify-between">

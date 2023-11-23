@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef} from "react";
 import Link from "next/link";
 import Back from '../components/Back';
+import Image from 'next/image';
 //import Encode from "../components/encode";
-import Decode from "../components/decode";
+//import Decode from "../components/decode";
 import About from "../components/about";
 import ImageDetails from "../components/imageDetails";
 import axios from 'axios'
@@ -149,7 +150,7 @@ export default function Encode() {
       <div className="gap-4 grid">
         <div className="flex flex-row justify-between">
             <div className="flex flex-row space-x-5 place-items-center">
-                <img src="/stegalogo.png" className="h-24" />
+                <Image src="/stegalogo.png" className="h-24" alt="stegamark logo"/>
                 <div className="flex flex-col items-left space-y-2">
                     <h1>StegaMark</h1>
                     <p>
@@ -159,12 +160,12 @@ export default function Encode() {
                 </div>
             </div>
         <div className="flex flex-row space-x-8 place-items-center">
-            <a href="/" className="text-gray-400">
+            <Link href="/" className="text-gray-400">
                 About
-            </a>
-            <a href="/" className="text-gray-400">
+            </Link>
+            <Link href="/" className="text-gray-400">
                 Sign In / Register
-            </a>
+            </Link>
         </div>
     </div>
       <Back />

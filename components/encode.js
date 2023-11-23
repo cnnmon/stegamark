@@ -1,4 +1,7 @@
 import Back from "./Back";
+import Image from 'next/image';
+import Link from "next/link";
+
 
 export default function Encode() {
     return (
@@ -13,7 +16,7 @@ export default function Encode() {
             </div>
             <div className="grid justify-items-end">
                 <p>
-                    ...or <a href="/">sign in</a> to add an image to your
+                    ...or <Link href="/">sign in</Link> to add an image to your
                     Creator record
                 </p>
             </div>

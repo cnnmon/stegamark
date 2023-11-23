@@ -1,4 +1,6 @@
+
 import React, { useEffect } from "react";
+import Image from 'next/image';
 import Link from "next/link";
 import Encode from "../components/encode";
 import Decode from "../components/decode";
@@ -30,7 +32,7 @@ export default function Home() {
         <div className="gap-8 grid">
             <div className="flex flex-row justify-between">
                 <div className="flex flex-row space-x-5 place-items-center">
-                    <img src="/stegalogo.png" className="h-24" />
+                    <Image src="/stegalogo.png" className="h-24" />
                     <div className="flex flex-col items-left space-y-2">
                         <h1>StegaMark</h1>
                         <p>
@@ -40,12 +42,12 @@ export default function Home() {
                     </div>
                 </div>
                 <div className="flex flex-row space-x-8 place-items-center">
-                    <a href="/" className="text-gray-400">
+                    <Link href="/" className="text-gray-400">
                         About
-                    </a>
-                    <a href="/" className="text-gray-400">
+                    </Link>
+                    <Link href="/" className="text-gray-400">
                         Sign In / Register
-                    </a>
+                    </Link>
                 </div>
             </div>
 

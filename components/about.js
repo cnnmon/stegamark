@@ -29,7 +29,7 @@ export default function About() {
             <ul className="list-disc list-inside pl-8">
                 <li>multiple download options</li>
                 <li>decentralizing the directory system</li>
-                <li>community record "editing"</li>
+                <li>community record &quot;editing&quot;</li>
             </ul>
         </div>
     );
