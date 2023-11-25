@@ -1,22 +1,18 @@
 
 import React, { useEffect } from "react";
 import Image from 'next/image';
-import Link from "next/link";
-import Encode from "../components/encode";
-import Decode from "../components/decode";
-import About from "../components/about";
-import ImageDetails from "../components/imageDetails";
 
-function NavigationButton({ page, text }) {
-    const onClick = () => {
-        window.location.href = `/${page}`;
-    };
-
+function Card({ color, img, content, link }) {
     return (
-        <button onClick={onClick} className="bg-gray-200 flex items-center rounded-lg w-[50%] h-[200px] justify-center p-5">
-      {text}
-        </button>
-    );
+        <div className="flex flex-col items-center">
+            <div style={{ backgroundColor: color }} onClick={() => window.location.href=link} className="nav-card">
+                <Image src={img} alt="encode/decode art" width={290} height={290} />
+                <br />
+                {content}
+            </div>
+        </div>
+
+    )
 }
 
 export default function Home() {
@@ -30,70 +26,35 @@ export default function Home() {
 
     return (
         <div className="gap-8 grid">
-            <div className="flex flex-row justify-between">
-                <div className="flex flex-row space-x-5 place-items-center">
-                    <Image src="/stegalogo.png" className="h-24" />
-                    <div className="flex flex-col items-left space-y-2">
-                        <h1>StegaMark</h1>
-                        <p>
-                            reliable, deep digital watermarking & image
-                            attribution
-                        </p>
-                    </div>
-                </div>
-                <div className="flex flex-row space-x-8 place-items-center">
-                    <Link href="/" className="text-gray-400">
-                        About
-                    </Link>
-                    <Link href="/" className="text-gray-400">
-                        Sign In / Register
-                    </Link>
+            <div className="flex flex-col items-center">
+                <h1>StegaMark</h1>
+                <p>All-in-one tool for reliable, deep digital watermarking & image attribution.</p>
+            </div>
+            <div className="flex flex-col items-center">
+                <div className="flex flex-row items-center justify-center gap-4 px-0 lg:px-16">
+                    <Card color="#C69AFE" img="/encode_art.png" link="/encode" content={<h3>I want to <b><u>encode</u></b> a new image.</h3>} />
+                    <h2><b>or</b></h2>
+                    <Card color="#F8D479" img="/decode_art.png" link="/decode" content={<h3>I want to <b><u>decode</u></b> an existing image.</h3>} />
                 </div>
             </div>
-
-             <div className="flex gap-4 justify-center">
-                <NavigationButton
-                  page="encode"
-                  text="I want to encode - embed an image with new metadata"
-                />
-                <NavigationButton
-                  page="decode"
-                  text="I want to decode - check for or edit an image's embedded metadata"
-                />
-              </div>
-
-        <div>
-            <h2>Saved images</h2>
-            <p>Try appending any 8-digit number (padded with 0s) to the end of the url, or try the below:</p>
-            <div className="flex flex-col">
-              {images.map((image) => 
-                <Link href={`/${image.id}`} key={image.id}>{image.id}</Link>
-              )}
-            </div>
-        </div>        
-
-
-            <div className="flex flex-col gap-4 place-items-center">
-                {/*<Encode />
-                <Decode />*/}
-            </div>
-
-            <About />
-
-            {/* <div>
-                <h2>Saved images</h2>
-                <p>
-                    Try appending any 8-digit number (padded with 0s) to the end
-                    of the url, or try the below:
-                </p>
-                <div className="flex flex-col">
-                    {images.map((image) => (
-                        <Link href={`/${image.id}`} key={image.id}>
-                            {image.id}
-                        </Link>
-                    ))}
+            <div>
+                <h4>Explore previously embedded images</h4>
+                <p>Click on an image to view its metadata and more information about its embedding. Or, try decoding one of these images.</p>
+                <br />
+                <div className="flex flex-row gap-4 justify-center">
+                    {images.map((image) => 
+                        <>
+                            <div key={image.id} className="preview-card" onClick={() => window.location.href=`/${image.id}`}>
+                                <Image src={image.src} alt={image.id} width={300} height={300} />
+                            </div>
+                        </>
+                    )}
                 </div>
-            </div> */}
+            </div>
+            <div>
+                <h4>Why do we need robust embedding?</h4>
+                <p>Robust embedding is essential in the digital age. Our tool offers an invisible watermark that contributes to the proper attribution of artists and creators, while also being robust to compression and sharing across social media. Try it out yourself!</p>
+            </div>
         </div>
     );
 }

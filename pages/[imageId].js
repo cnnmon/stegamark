@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Back from '../components/Back';
-import { images } from '../lib/constants';
 import Link from 'next/link';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
@@ -80,16 +79,15 @@ export default function ImageLookup({ image }) {
   
   return (
     <>
-      <Back />
       <div className="flex flex-col gap-4">
         <Image src={src} alt={id} width={300} height={300} />
         <div>
-          <h2>General</h2>
+          <h2>General Information</h2>
           <p><b>ID</b> {id}</p>
           <p><b>Source</b> <Link href={src} className="overflow-ellipsis overflow-hidden">{src}</Link></p>
         </div>
         <div>
-          <h2>Metadata</h2>
+          <h2>Decoded Metadata</h2>
           {renderMetadata()}
         </div>
       </div>
