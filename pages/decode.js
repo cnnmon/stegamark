@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import axios from "axios";
 import { STATES, ENCODING_TYPES, getStatusMessage } from '../lib/constants';
 
+const python_server = "http://localhost:8000";
+//const python_server = "https://rosteals-server-fbea1f0f4f47.herokuapp.com/decode";
+
 export default function Decode() {
   const [decodeState, setDecodeState] = useState(STATES.DEFAULT);
   const [file, setFile] = useState(null);
+  const [urlInput, setUrlInput] = useState('https://stega-storage.s3.amazonaws.com//encoded_images/encoded_bubbles.png');
   const [secret, setSecret] = useState(' '); // secretz
   const [encodingType, setEncodingType] = useState(0);
 
@@ -36,7 +40,7 @@ export default function Decode() {
 
     try {
       // this should take in the file image (not the url) and try to decode it
-      const response = await axios.post('https://rosteals-server-fbea1f0f4f47.herokuapp.com/decode', formData);
+      let response = await axios.post(python_server.concat('/upload'), formData);
 
       if (response.status !== 200) {
         console.error('Error decoding image')
@@ -45,14 +49,37 @@ export default function Decode() {
       }
 
       const data = await response.data;
-      console.log('decoded secret:', data.secret);
-      setSecret(data.secret);
-      setDecodeState(STATES.SUCCESS);
+      console.log('image uploaded to:', data.imageUrl);
+
+      // if the image uploaded successfully, try decoding it
+      const formData2 = new FormData(); //create formdata to send...
+      formData2.append('imageUrl',data.imageUrl);
+      try{
+        let response = await axios.post(python_server.concat('/decode'), formData2);
+        
+        if (response.status === 200) {
+          const data = await response.data;
+          console.log('decoded secret:', data.secret);
+          setSecret(data.secret);
+          setDecodeState(STATES.SUCCESS);
+        }
+        else{
+          console.error("received failed image decoding response from server")
+        }
+                
+
+
     } catch (error) {
       console.error('Error uploading file:', error);
       setDecodeState(STATES.ERROR);
     }
+  } catch (error) {
+    console.error('Error submitting image:', error);
+    setDecodeState(STATES.ERROR);
   }
+
+
+} //end file handler function
 
   return (
     <div className="gap-8 grid">

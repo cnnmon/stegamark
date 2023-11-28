@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from 'axios';
 import JsonInput from '../components/JsonInput';
 import { STATES, ENCODING_TYPES, getStatusMessage } from '../lib/constants';
+const python_server = "http://localhost:8000";
+//const python_server = "https://rosteals-server-fbea1f0f4f47.herokuapp.com/decode";
 
 const DEFAULT_METADATA = `{
   "Title": "My image",
@@ -11,9 +13,19 @@ const DEFAULT_METADATA = `{
   "Twitter": "@mytwitterhandle"
 }`
 
+function getNextId(){
+  //!! TODO: this should (ig by looking at the database?) grab the next unique id. 
+  // ex, if there are 0050 images in the database, the next id should be 51 (or something like that.)
+  let nextId = "0050"
+  console.log(nextId);
+  return nextId
+}
+
+
 export default function Encode() {
   const [uploadState, setUploadState] = useState(STATES.DEFAULT);
   const [file, setFile] = useState(null);
+  const [id, setId] = useState(0); // Initial ID value
   const [metadata, setMetadata] = useState(DEFAULT_METADATA);
   const [encodingType, setEncodingType] = useState(0);
 
@@ -39,15 +51,20 @@ export default function Encode() {
 
     setUploadState(STATES.UPLOADING);
 
-    // make a POST request to send this image and ID to the Flask server...
+    const id = await getNextId(); //get this image's id and set that state before doing anything else...
+    setId(id);
+
+    // make a POST request to send this image and ID to the python Flask server...
     const formData = new FormData(); // create formdata to send...
     formData.append('file', file);
-    formData.append('metadata', metadata);
+    formData.append('id', id)
+    //formData.append('metadata', metadata);  
+    // ^ note from shm: we can't send the metadata to the Python server! just the ID that will be encoded. we CAN (and should) send the metadata to the database, and make sure it's linked to that particular id. 
 
     try {
       // this should take in the file image and metadata, log all of this in the database (including getting & storing an image url and generating a unique id)
       // then, it should only need to return the id
-      const response = await axios.post('https://rosteals-server-fbea1f0f4f47.herokuapp.com/encode', formData);
+      const response = await axios.post(python_server.concat('/encode'), formData);
 
       if (response.status !== 200) {
         console.error('Error encoding image')
