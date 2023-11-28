@@ -91,6 +91,7 @@ export default function Encode() {
         * next we need to log this in the database
         * It also would be nice to send the user to the directory URL for this image at this point,
         * where they can see their encoded image and metadata. */
+      
 
       setUploadState(STATES.SUCCESS);
     } catch (error) {

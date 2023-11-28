@@ -4,18 +4,12 @@ const handler = async (_request, response) => {
 
   try {
     const resp = await client.databases.query({
-        database_id: "8305e69ba7d449718d78c12f087f9437",
+        database_id: "de1ffc3759bf450fbc16df4c69d22d95",
         filter: {
-          property: "name",
-          text: {
-            content: "Title1"
-          },
-          and: [{
-            property: "uuid8",
-            rich_text: {
-              equals: "12345678"
-            }
-          }]
+          property: "id",
+          title: {
+            equals: "00000001"
+          }
         }
     });
     return response.status(200).json({ resp })
