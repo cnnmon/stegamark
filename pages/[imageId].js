@@ -1,21 +1,24 @@
 import Image from 'next/image';
 import Back from '../components/Back';
 import Link from 'next/link';
+import { client } from '../lib/constants';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 /* Returns all possible paths for https://website.com/:imageId */
 export async function getStaticPaths() {
-  const response = await fetch(`${API_URL}/api/getAllImages`);
+  const response = await client.databases.query({
+    database_id: "de1ffc3759bf450fbc16df4c69d22d95",
+  });
 
-  if (!response.ok) {
-    return {
-      paths: [],
-      fallback: false
-    };
+  const results = response.results;
+  const images = [];
+  // iterates through all the rows in the db
+  for (const result of results) {
+    let properties = result.properties;
+    images.push({id: properties.id.title[0].plain_text, src: properties.src.rich_text[0].plain_text, metadata: properties.metadata.rich_text[0].plain_text});
   }
 
-  const { images } = await response.json();
   return {
     paths: images.map((image) => ({ params: { imageId: image.id.toString() } })),
     fallback: false
@@ -24,21 +27,25 @@ export async function getStaticPaths() {
 
 /* Returns props if given a specific image id */
 export async function getStaticProps({ params: { imageId } }) {
-  const response = await fetch(`${API_URL}/api/getImageById?id=${imageId}`);
+  const response = await client.databases.query({
+    database_id: "de1ffc3759bf450fbc16df4c69d22d95",
+    filter: {
+      property: "id",
+      title: {
+        equals: imageId
+      }
+    }
+  });
 
-  if (!response.ok) {
+  if (!response.results) {
     throw new Error(JSON.stringify(response));
   }
 
-  const { image } = await response.json();
-
-  if (!image) {
-    throw new Error(JSON.stringify(response));
-  }
+  const results = response.results;
 
   return {
     props: {
-      image,
+      results,
     }
   };
 }
@@ -88,7 +95,7 @@ export default function ImageLookup({ image }) {
         </div>
         <div>
           <h2>Decoded Metadata</h2>
-          {renderMetadata()}
+          {/* {renderMetadata()} */}
         </div>
       </div>
     </>
