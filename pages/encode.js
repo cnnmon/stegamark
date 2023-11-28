@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axios from 'axios';
+import Image from 'next/image';
 import JsonInput from '../components/JsonInput';
 import { STATES, ENCODING_TYPES, getStatusMessage } from '../lib/constants';
-const python_server = "http://localhost:8000";
-//const python_server = "https://rosteals-server-fbea1f0f4f47.herokuapp.com/decode";
+//const python_server = "http://localhost:8000"; //for testing locally
+const python_server = "https://rosteals-server-fbea1f0f4f47.herokuapp.com/";
 
 const DEFAULT_METADATA = `{
   "Title": "My image",
@@ -25,9 +26,13 @@ function getNextId(){
 export default function Encode() {
   const [uploadState, setUploadState] = useState(STATES.DEFAULT);
   const [file, setFile] = useState(null);
-  const [id, setId] = useState(0); // Initial ID value
+  
   const [metadata, setMetadata] = useState(DEFAULT_METADATA);
   const [encodingType, setEncodingType] = useState(0);
+
+  const [uploadUrl, setUploadUrl] = useState("https://stega-storage.s3.amazonaws.com//encoded_images/encoded_1234.png"); //has the encoded image url
+  const [key, setKey] = useState(0); // this key thing forces the react component to update 
+
 
   /* this stuff handles the file upload... */
   function handleFileChange(e) {
@@ -51,8 +56,7 @@ export default function Encode() {
 
     setUploadState(STATES.UPLOADING);
 
-    const id = await getNextId(); //get this image's id and set that state before doing anything else...
-    setId(id);
+    const id = getNextId(); //get this image's id and set that state before doing anything else...
 
     // make a POST request to send this image and ID to the python Flask server...
     const formData = new FormData(); // create formdata to send...
@@ -73,7 +77,14 @@ export default function Encode() {
       }
 
       const data = await response.data;
+      // ---  SUCCESS!! ---- //
+
+      console.log('image uploaded to:', data.imageUrl);
+      console.log("set id to: " + id);
+      setUploadUrl(data.imageUrl);
+      setKey((prevKey)=> prevKey+1);
       console.log(data);
+
 
       /*!! TODO: at this point we have the metadata form all filled out, plus the encoded image's url and its id. 
         * we've put that data in formData.
@@ -134,6 +145,21 @@ export default function Encode() {
       <p>
         {getStatusMessage(uploadState)}
       </p>
+
+      <div 
+          style={uploadState==(STATES.SUCCESS) ? {} : { display: 'none' }}
+          className="flex flex-col gap-4">
+                <Image 
+                key={key} 
+                src={uploadUrl}
+                fill={true}
+                className="h-[200px] object-contain"
+                alt= "encoded image" />
+                
+              
+        </div>
+
+
     </div>
   );
 }

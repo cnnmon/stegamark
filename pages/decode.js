@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { STATES, ENCODING_TYPES, getStatusMessage } from '../lib/constants';
 
-const python_server = "http://localhost:8000";
-//const python_server = "https://rosteals-server-fbea1f0f4f47.herokuapp.com/decode";
+//const python_server = "http://localhost:8000";
+const python_server = "https://rosteals-server-fbea1f0f4f47.herokuapp.com/";
 
 export default function Decode() {
   const [decodeState, setDecodeState] = useState(STATES.DEFAULT);
