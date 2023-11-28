@@ -14,7 +14,7 @@ const handler = async (_request, response) => {
               title: [{
                 type: "text",
                 text: {
-                  content: "00000002"
+                  content: _request.query.title
                 }
               }]
             },
@@ -22,7 +22,7 @@ const handler = async (_request, response) => {
                 type: "rich_text",
                 rich_text: [{
                   text: {
-                    content: "https://pbs.twimg.com/media/FBigYmKWEAUv1sY?format=jpg&name=4096x4096"
+                    content: _request.query.src
                   }
                 }]
             },
@@ -30,7 +30,7 @@ const handler = async (_request, response) => {
                 type: "rich_text",
                 rich_text: [{
                   text: {
-                    content: `{ "key": "data for test2" }`
+                    content: `{ "key": ${_request.query.metadata} }`
                   }
                 }]
             },
