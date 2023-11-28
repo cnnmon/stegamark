@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from 'axios';
+import Link from 'next/link'
 import Image from 'next/image';
 import JsonInput from '../components/JsonInput';
 import { STATES, ENCODING_TYPES, getStatusMessage } from '../lib/constants';
@@ -17,7 +18,7 @@ const DEFAULT_METADATA = `{
 function getNextId(){
   //!! TODO: this should (ig by looking at the database?) grab the next unique id. 
   // ex, if there are 0050 images in the database, the next id should be 51 (or something like that.)
-  let nextId = "0050"
+  let nextId = "0000050"
   console.log(nextId);
   return nextId
 }
@@ -32,7 +33,7 @@ export default function Encode() {
 
   const [uploadUrl, setUploadUrl] = useState("https://stega-storage.s3.amazonaws.com//encoded_images/encoded_1234.png"); //has the encoded image url
   const [key, setKey] = useState(0); // this key thing forces the react component to update 
-
+  const [id, setId] = useState(getNextId()); //has the encoded image id
 
   /* this stuff handles the file upload... */
   function handleFileChange(e) {
@@ -55,8 +56,6 @@ export default function Encode() {
     }
 
     setUploadState(STATES.UPLOADING);
-
-    const id = getNextId(); //get this image's id and set that state before doing anything else...
 
     // make a POST request to send this image and ID to the python Flask server...
     const formData = new FormData(); // create formdata to send...
@@ -93,6 +92,7 @@ export default function Encode() {
         * where they can see their encoded image and metadata. */
 
       setUploadState(STATES.SUCCESS);
+      setKey((prevKey)=> prevKey+1);
     } catch (error) {
       console.error(error);
       setUploadState(STATES.ERROR);
@@ -147,12 +147,15 @@ export default function Encode() {
       </p>
 
       <div 
-          style={uploadState==(STATES.SUCCESS) ? {} : { display: 'none' }}
-          className="flex flex-col gap-4">
+          style={uploadState==(STATES.SUCCESS) ? {paddingBottom: 'min(350px, ${100 / (width / height)}%)'} : { display: 'none'}}
+          className={'next-image-wrapper'}>
+            <h2><Link href={"/".concat(id.toString().padStart(8,'0'))}>Processing complete! Click here to view your encoded image and its metadata record.</Link></h2>
                 <Image 
                 key={key} 
                 src={uploadUrl}
-                fill={true}
+                //fill={true}
+                width={800}
+                height={500}
                 className="h-[200px] object-contain"
                 alt= "encoded image" />
                 

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { STATES, ENCODING_TYPES, getStatusMessage } from '../lib/constants';
+import Link from 'next/link'
 
 //const python_server = "http://localhost:8000";
 const python_server = "https://rosteals-server-fbea1f0f4f47.herokuapp.com/";
 
 export default function Decode() {
+  
   const [decodeState, setDecodeState] = useState(STATES.DEFAULT);
   const [file, setFile] = useState(null);
   const [urlInput, setUrlInput] = useState('https://stega-storage.s3.amazonaws.com//encoded_images/encoded_bubbles.png');
@@ -59,9 +61,17 @@ export default function Decode() {
         
         if (response.status === 200) {
           const data = await response.data;
-          console.log('decoded secret:', data.secret);
           setSecret(data.secret);
-          setDecodeState(STATES.SUCCESS);
+
+          if (isNaN(data.secret)) { //it's not a valid number
+            setDecodeState(STATES.FAILURE_DECODE);
+          }
+          else{
+            setSecret(data.secret.padStart(8, '0'));
+            console.log('decoded secret:', data.secret.padStart(8, '0')); //pad it with enough 0s to be an 8 digit number
+            console.log('Resulting secret url should be: /', secret);
+            setDecodeState(STATES.SUCCESS);
+          }
         }
         else{
           console.error("received failed image decoding response from server")
@@ -123,10 +133,19 @@ export default function Decode() {
         {getStatusMessage(decodeState)}
         {decodeState === STATES.SUCCESS && (
           <div className="flex flex-col gap-4 place-items-center">
-            <h3>the encoded secret was: </h3>
+            <h3>Success! Your image was embedded with this id: </h3>
             <h1>{secret}</h1>
+            <Link href={'/'.concat(secret)}>Click here to view its metadata record.</Link>
           </div>
         )}
+      </div>
+
+      <div
+      className="flex flex-col gap-4 place-items-center"
+      style={decodeState==(STATES.FAILURE_DECODE) ? {} : { display: 'none'}}>
+            <h3>We found this embedded in your image: </h3>
+            <h1>{secret}</h1>
+            <h4>This does not seem to be a valid image ID. This suggests we do not have a metadata record for this image. <Link href="/encode"> Click here to embed your own!</Link></h4>
       </div>
     </div>
   );
