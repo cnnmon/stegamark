@@ -6,55 +6,33 @@ const handler = async (_request, response) => {
     const resp = await client.pages.create({
         parent: {
             type: "database_id",
-            database_id: "8305e69ba7d449718d78c12f087f9437"
+            database_id: "de1ffc3759bf450fbc16df4c69d22d95"
         },
         properties: {
-            name: {
+            id: {
               type: "title",
               title: [{
                 type: "text",
                 text: {
-                  content: "Title1"
+                  content: "00000002"
                 }
               }]
             },
-            uuid8: {
+            src: {
                 type: "rich_text",
                 rich_text: [{
                   text: {
-                    content: "12345678"
+                    content: "https://pbs.twimg.com/media/FBigYmKWEAUv1sY?format=jpg&name=4096x4096"
                   }
                 }]
             },
-            uploader: {
+            metadata: {
                 type: "rich_text",
                 rich_text: [{
                   text: {
-                    content: "You"
+                    content: `{ "key": "data for test2" }`
                   }
                 }]
-            },
-            attr_url: {
-                type: "rich_text",
-                rich_text: [{
-                  text: {
-                    content: "example.com"
-                  }
-                }]
-            },
-            attr_alias: {
-                type: "rich_text",
-                rich_text: [{
-                  text: {
-                    content: "Shmothy"
-                  }
-                }]
-            },
-            attr_date: {
-                type: "date",
-                date: {
-                  start: "2020-12-08"
-                }
             },
         }
     });

@@ -4,34 +4,18 @@ const handler = async (_request, response) => {
 
   try {
     const resp = await client.pages.update({
-        page_id: "29276451-d0b4-4258-82a5-703768acaac2",
+        page_id: "942ee638392a4ce0b6982848b7a8f678",
         properties: {
-          name: {
+          id: {
             type: "title",
             title: [{
               type: "text",
               text: {
-                content: "Title2"
+                content: "00000004"
               }
             }]
           },
-          uuid8: {
-              type: "rich_text",
-              rich_text: [{
-                text: {
-                  content: "12345678"
-                }
-              }]
-          },
-          uploader: {
-              type: "rich_text",
-              rich_text: [{
-                text: {
-                  content: "You"
-                }
-              }]
-          },
-          attr_url: {
+          src: {
               type: "rich_text",
               rich_text: [{
                 text: {
@@ -39,19 +23,13 @@ const handler = async (_request, response) => {
                 }
               }]
           },
-          attr_alias: {
+          metadata: {
               type: "rich_text",
               rich_text: [{
                 text: {
-                  content: "Shmothy"
+                  content: "{Author: You}"
                 }
               }]
-          },
-          attr_date: {
-              type: "date",
-              date: {
-                start: "2020-12-08"
-              }
           },
       }
     });

@@ -12,33 +12,19 @@ const handler = async (_request, response) => {
             {
                 type: "text",
                 text: {
-                    content: "image_metadata"
+                    content: "Images"
                 }
             }
         ],
         properties: {
-            name: {
-              title: {}
+            id: {
+                title: {}
             },
-            uuid8: {
-                type: "rich_text",
+            src: {
                 rich_text: {}
             },
-            uploader: {
-                type: "rich_text",
+            metadata: {
                 rich_text: {}
-            },
-            attr_url: {
-                type: "rich_text",
-                rich_text: {}
-            },
-            attr_alias: {
-                type: "rich_text",
-                rich_text: {}
-            },
-            attr_date: {
-                type: "date",
-                date: {}
             },
         }
     });
